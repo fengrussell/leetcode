@@ -11,14 +11,26 @@ public class Solution {
         // 用HashTable表记录重复的字符和下标，如果重复则更新下标list，只有list长度为1，说明没有重复的，然后再找最小的index
         Hashtable<Byte, ByteIdx> byteTable = new Hashtable<Byte, ByteIdx>();
 
-        for (int i = 0; i < bytes.length; i++) {
+        for (int i = 0; i < (bytes.length+1)/2; i++) {
             ByteIdx byteIdx = byteTable.get(bytes[i]);
             if (byteIdx == null) {
                 byteIdx = new ByteIdx(bytes[i]);
-                byteIdx.addIndex(i);
+                byteIdx.setIndex(i);
                 byteTable.put(bytes[i], byteIdx);
             } else {
-                byteIdx.addIndex(i);
+                byteIdx.setIndex(i);
+            }
+
+            int lastIdx = bytes.length-1-i;
+            if (lastIdx > i) {
+                ByteIdx lastByteIdx = byteTable.get(bytes[lastIdx]);
+                if (lastByteIdx == null) {
+                    lastByteIdx = new ByteIdx(bytes[lastIdx]);
+                    lastByteIdx.setIndex(lastIdx);
+                    byteTable.put(bytes[lastIdx], lastByteIdx);
+                } else {
+                    lastByteIdx.setIndex(lastIdx);
+                }
             }
         }
 
@@ -26,11 +38,11 @@ public class Solution {
 
         Enumeration e = byteTable.elements();
         while (e.hasMoreElements()) {
-            List<Integer> list = ((ByteIdx)e.nextElement()).idxList;
+            ByteIdx idx = (ByteIdx)e.nextElement();
 
-            if (list.size() == 1) {
-                if (index == -1 || list.get(0) < index) {
-                    index = list.get(0);
+            if (!idx.isRepeate) {
+                if (index == -1 || idx.minIdx < index) {
+                    index = idx.minIdx;
                 }
             }
         }
@@ -48,14 +60,21 @@ public class Solution {
 
 class ByteIdx {
     Byte value;
-    List<Integer> idxList;
+    boolean isRepeate = false;
+    int minIdx = -1;
 
     public ByteIdx(Byte _byte) {
         value = _byte;
-        idxList = new ArrayList<Integer>();
     }
 
-    public void addIndex(Integer index) {
-        idxList.add(index);
+    public void setIndex(Integer index) {
+        if (minIdx == -1) {
+            minIdx = index;
+        } else {
+            isRepeate = true;
+            if (index < minIdx) {
+                minIdx = index;
+            }
+        }
     }
 }
