@@ -1,7 +1,5 @@
 package WeeklyContest34;
 
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by russell on 2017/5/28.
@@ -9,24 +7,38 @@ import java.util.Set;
 public class ArrayNesting {
     public int arrayNesting(int[] nums) {
 
-        Set<Integer> set = new HashSet<Integer>();
-        int value = 0;
-        set.add(value);
+        int maxLen = 0;
+        int len = 0;
+
         for (int i = 0; i < nums.length; i++) {
-            value = nextIndex(value, nums);
-            if (set.contains(value)) {
-                return i+1;
-            } else {
-                set.add(value);
+
+            len = nextIndex(i, nums);
+            if (maxLen < len) {
+                maxLen = len;
             }
         }
 
-        return nums.length;
+        return maxLen;
     }
 
-    public int nextIndex(int value, int[] nums) {
-        return nums[value];
+    public int nextIndex(int startIdx, int[] array) {
+        int nextIdx = array[startIdx];
+        if (nextIdx == startIdx) {
+            return 1;
+        } else {
+            return nextIndex(nextIdx, startIdx, array)+1;
+        }
     }
+
+    public int nextIndex(int index, int startIdx, int[] array) {
+        int nextIdx = array[index];
+        if (nextIdx == startIdx) {
+            return 1;
+        } else {
+            return nextIndex(nextIdx, startIdx, array)+1;
+        }
+    }
+
 
     public static void main(String[] args) {
         ArrayNesting arrayNesting = new ArrayNesting();
@@ -34,5 +46,7 @@ public class ArrayNesting {
         System.out.println(arrayNesting.arrayNesting(nums));
         int nums1[] = {0,2,1};
         System.out.println(arrayNesting.arrayNesting(nums1));
+        int nums2[] = {0,1,2};
+        System.out.println(arrayNesting.arrayNesting(nums2));
     }
 }
