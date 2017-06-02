@@ -27,6 +27,8 @@ public class ArrayNesting1 {
 
     /**
      * 耗时最短的答案，有点疑问，感觉时间复杂度没有上面的高效。这种避免用递归（我的答案提示TLE，思路一样）。
+     * 2017.06.02 今天在leetcode提交，这个方法已经提示TLE了。这样可以判断contest当天测试用例没有那么多TestCase，所以可以submit。
+     * 今天验证的结果，这个方法耗时为800-900ms，上面的方法耗时<10ms
      * @param nums
      * @return
      */
